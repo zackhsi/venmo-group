@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -e
+
+helpmsg() {
+echo <<EOF
+Usage: ./roommates <amount> <note>
+EOF
+exit 1
+}
+
+amount=$1; shift
+if [ ! -z "$action" ]; then
+  helpmsg
+fi
+note=$1; shift
+if [ -z "$note" ]; then
+  helpmsg
+fi
+
+main() {
+  venmo charge "@nicholas-lippis" "$amount" "$note" &
+  venmo charge "@traplord" "$amount" "$note" &
+  venmo charge "@ben-hunter-3" "$amount" "$note" &
+  venmo charge "@ben-lurie" "$amount" "$note" &
+}
+
+main
