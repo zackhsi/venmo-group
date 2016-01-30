@@ -1,0 +1,13 @@
+#!/usr/bin/env bash -e
+
+#
+# I pay 1951.28
+# Total is 8457.70
+# I need to cash out $6506.42
+#
+
+venmo charge "@nicholas-lippis" 1961.28 "Rent" &
+venmo charge "@dylan-harris-3" 1716.28 "Rent" &
+venmo charge "@robert-garbanati" 976.28 "Rent" &
+venmo charge "@zmorris" 876.29 "Rent" &
+venmo charge "@traplord" 976.29 "Rent" &
