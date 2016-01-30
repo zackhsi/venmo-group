@@ -1,27 +1,42 @@
-#!/usr/bin/env bash
-set -e
+#!/usr/bin/env bash -e
 
 helpmsg() {
-echo <<EOF
-Usage: ./roommates <amount> <note>
-EOF
-exit 1
+  echo "Usage: ./roommates <amount> <note>"
+  exit 1
 }
 
-amount=$1; shift
-if [ ! -z "$action" ]; then
+if [ -z "$1" ]; then
   helpmsg
-fi
-note=$1; shift
-if [ -z "$note" ]; then
-  helpmsg
+else
+  amount=$1
+  shift
 fi
 
+if [ -z "$1" ]; then
+  helpmsg
+else
+  note=$1
+  shift
+fi
+
+roommates=(
+  "@nicholas-lippis"
+  "@dylan-harris-3"
+  "@robert-garbanati"
+  "@zmorris"
+  "@traplord"
+  # "@ben-hunter-3"
+  # "@ben-lurie"
+)
+
+num_roommates=$(( ${#roommates[@]} + 1 ))  # including me
+cost_per=$(python -c "from math import ceil; print '{0:.2f}'.format($amount/float($num_roommates))")
+
 main() {
-  venmo charge "@nicholas-lippis" "$amount" "$note" &
-  venmo charge "@traplord" "$amount" "$note" &
-  venmo charge "@ben-hunter-3" "$amount" "$note" &
-  venmo charge "@ben-lurie" "$amount" "$note" &
+  for roommate in ${roommates[@]}; do
+    # echo "would charge $roommate $cost_per"
+    venmo charge "$roommate" "$cost_per" "$note" &
+  done
 }
 
 main
