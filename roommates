@@ -1,42 +1,31 @@
-#!/usr/bin/env bash -e
+#!/usr/bin/env python
+"""
+Split a charge amongst my roommates.
+"""
+import argparse
 
-helpmsg() {
-  echo "Usage: ./roommates <amount> <note>"
-  exit 1
+import venmo
+
+ROOMMATES = {
+    '@nicholas-lippis',
+    '@dylan-harris-3',
+    '@robert-garbanati',
+    '@zmorris',
+    '@traplord',
+    '@ben-hunter-3',
 }
 
-if [ -z "$1" ]; then
-  helpmsg
-else
-  amount=$1
-  shift
-fi
 
-if [ -z "$1" ]; then
-  helpmsg
-else
-  note=$1
-  shift
-fi
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('total', help='total fee to split', type=float)
+    parser.add_argument('note', help='note for the charge')
+    args = parser.parse_args()
+    amount = float('{:.2f}'.format(args.total / (len(ROOMMATES) + 1)))
+    note = args.note
+    for roommate in ROOMMATES:
+        venmo.payment.charge(roommate, amount, note)
 
-roommates=(
-  "@nicholas-lippis"
-  "@dylan-harris-3"
-  "@robert-garbanati"
-  "@zmorris"
-  "@traplord"
-  # "@ben-hunter-3"
-  # "@ben-lurie"
-)
 
-num_roommates=$(( ${#roommates[@]} + 1 ))  # including me
-cost_per=$(python -c "from math import ceil; print '{0:.2f}'.format($amount/float($num_roommates))")
-
-main() {
-  for roommate in ${roommates[@]}; do
-    # echo "would charge $roommate $cost_per"
-    venmo charge "$roommate" "$cost_per" "$note" &
-  done
-}
-
-main
+if __name__ == '__main__':
+    main()
