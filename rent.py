@@ -2,24 +2,28 @@
 """
 Charge my roommates rent.
 
-I pay 1910.05
-Total is 8457.70
-I need to cash out $6546.95
+I pay 1900
+Total is 10750
+I need to cash out 8850
 """
 
 import venmo
 
-CONVENIENCE_FEE = 5
 CHARGES = {
-    '@nicholas-lippis': 1920.04 + CONVENIENCE_FEE,
-    '@dylan-harris-3': 1675.04 + CONVENIENCE_FEE,
-    '@robert-garbanati': 976.28 + CONVENIENCE_FEE,
-    '@zmorris': 1000,
-    '@traplord': 976.29 + CONVENIENCE_FEE,
+    '@nicholas-lippis': 1600,
+    '@dylan-harris-3': 1600,
+    '@robert-garbanati': 1700,
+    '@zmorris': 1500,
+    '@traplord': 1325,
+    '@ben-hunter-3': 1125,
 }
 
 
 def main():
+    total_charged = 1900 + sum(CHARGES.values())
+    error_message = ('{} != 10750, need {} more'
+                     .format(total_charged, 10750 - total_charged))
+    assert total_charged == 10750, error_message
     for user, amount in CHARGES.iteritems():
         venmo.payment.charge(user, amount, 'rent')
 
